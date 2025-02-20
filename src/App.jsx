@@ -1,4 +1,6 @@
 import './App.css'
+import Navbar from './Components/Navbar'
+import Task from './Components/Task'
 
 
 function App() {
@@ -6,7 +8,8 @@ function App() {
 
   return (
     <>
-     <h1>hello</h1>
+        <Navbar/>
+        <Task/>
     </>
   )
 }
