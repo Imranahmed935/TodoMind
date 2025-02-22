@@ -1,6 +1,3 @@
-
-
-
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
@@ -11,14 +8,16 @@ import Swal from "sweetalert2";
 
 const Task = () => {
   const [show, setShow] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false); // State for the edit modal
 
-  // State for form inputs
   const [taskValue, setTaskValue] = useState({
     task: "",
     description: "",
     time: new Date().toLocaleTimeString(),
     category: "",
   });
+
+  const [editTaskId, setEditTaskId] = useState(null); // State for the task ID being edited
 
   // Handle form input changes
   const handleValue = (e) => {
@@ -65,12 +64,43 @@ const Task = () => {
           refetch();
           Swal.fire({
             title: "Deleted!",
-            text: "Your file has been deleted.",
+            text: "Your task has been deleted.",
             icon: "success",
           });
         }
       }
     });
+  };
+
+  // Handle Edit Task
+  const handleEdit = (task) => {
+    setEditTaskId(task._id); // Set the task ID to be edited
+    setTaskValue({
+      task: task.task,
+      description: task.description,
+      time: task.time,
+      category: task.category,
+    });
+    setShowEditModal(true); // Show the edit modal
+  };
+
+  // Handle Update Task
+  const handleUpdate = async () => {
+    console.log("Updating task with ID:", editTaskId); // Log the task ID
+    try {
+      const res = await axios.put(`http://localhost:5000/updateTask/${editTaskId}`, taskValue);
+      console.log("Update Response:", res.data); // Log the response
+      if (res.data.modifiedCount > 0) {
+        setShowEditModal(false); // Close the modal
+        refetch();  // Refetch data to get the updated task list
+        toast.success("Task updated");
+      } else {
+        toast.error("Task not updated, try again");
+      }
+    } catch (error) {
+      console.error("Error updating task:", error);
+      toast.error("Error updating task");
+    }
   };
 
   return (
@@ -88,7 +118,7 @@ const Task = () => {
                 <p>{item.category}</p>
               </div>
               <div className="flex gap-4">
-                <span className="cursor-pointer">
+                <span className="cursor-pointer" onClick={() => handleEdit(item)}>
                   <FiEdit />
                 </span>
                 <span className="cursor-pointer" onClick={() => handleDelete(item._id)}>
@@ -153,14 +183,50 @@ const Task = () => {
             </button>
           )}
         </div>
-        <div className="border border-blue-500 p-2 rounded ">In-Progress</div>
+        <div className="border border-blue-500 p-2 rounded">In-Progress</div>
         <div className="border border-green-500 p-2 rounded">Done</div>
       </div>
+
+      {/* Edit Task Modal */}
+      {showEditModal && (
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded shadow-lg w-1/2">
+            <h2 className="text-xl mb-4">Edit Task</h2>
+            <input
+              name="task"
+              className="p-2 w-full mt-2 mb-2 border outline-none rounded"
+              type="text"
+              value={taskValue.task}
+              onChange={handleValue}
+            />
+            <input
+              name="description"
+              className="p-2 w-full mt-2 mb-2 border outline-none rounded"
+              type="text"
+              value={taskValue.description}
+              onChange={handleValue}
+            />
+            <input
+              name="category"
+              className="p-2 w-full mt-2 mb-2 border outline-none rounded"
+              type="text"
+              value={taskValue.category}
+              onChange={handleValue}
+            />
+
+            <div className="flex gap-2">
+              <button onClick={handleUpdate} className="text-xl bg-teal-400 p-2 rounded">
+                Update
+              </button>
+              <button onClick={() => setShowEditModal(false)} className="text-xl text-red-600 hover:bg-gray-300 p-2 rounded">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Task;
-
-
-
