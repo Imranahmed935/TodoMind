@@ -1,7 +1,7 @@
 import './App.css'
-// import Board from './Components/Board'
+import Board from './Components/Board'
 import Navbar from './Components/Navbar'
-import Task from './Components/Task'
+
 
 
 function App() {
@@ -10,8 +10,8 @@ function App() {
   return (
     <>
         <Navbar/>
-        <Task/>
-        {/* <Board/> */}
+        <Board/>
+      
     </>
   )
 }
