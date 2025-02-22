@@ -1,10 +1,12 @@
+
+
+
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashCan } from "react-icons/fa6";
-
 import Swal from "sweetalert2";
 
 const Task = () => {
@@ -27,7 +29,6 @@ const Task = () => {
     queryKey: ["read"],
     queryFn: async () => {
       const res = await axios.get("http://localhost:5000/taskRead");
-
       return res.data;
     },
   });
@@ -44,7 +45,7 @@ const Task = () => {
     const res = await axios.post("http://localhost:5000/task", taskValue);
     if (res.data.insertedId) {
       refetch();
-      toast.success("task added");
+      toast.success("Task added");
     }
   };
 
@@ -59,15 +60,13 @@ const Task = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axios.delete(
-          `http://localhost:5000/deleteTask/${id}`
-        );
+        const res = await axios.delete(`http://localhost:5000/deleteTask/${id}`);
         if (res.data.deletedCount > 0) {
           refetch();
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
-            icon: "success"
+            icon: "success",
           });
         }
       }
@@ -81,24 +80,18 @@ const Task = () => {
           <h1 className="pb-4">To-do</h1>
 
           {cards?.map((item) => (
-            <div
-              className="border rounded-md flex justify-between mt-2 p-2"
-              key={item._id}
-            >
-              <div className="">
+            <div key={item._id} className="border rounded-md flex justify-between mt-2 p-2">
+              <div>
                 <h1>{item.task}</h1>
                 <p>{item.description}</p>
                 <p>{item.time}</p>
                 <p>{item.category}</p>
               </div>
               <div className="flex gap-4">
-                <span>
+                <span className="cursor-pointer">
                   <FiEdit />
                 </span>
-                <span
-                  className="cursor-pointer"
-                  onClick={() => handleDelete(`${item._id}`)}
-                >
+                <span className="cursor-pointer" onClick={() => handleDelete(item._id)}>
                   <FaRegTrashCan />
                 </span>
               </div>
@@ -141,17 +134,10 @@ const Task = () => {
               />
 
               <div className="flex gap-2">
-                <button
-                  onClick={handleAdd}
-                  className="text-xl bg-teal-400 p-2 rounded"
-                >
+                <button onClick={handleAdd} className="text-xl bg-teal-400 p-2 rounded">
                   Add
                 </button>
-
-                <button
-                  onClick={() => setShow(false)}
-                  className="text-xl text-red-600 hover:bg-gray-300 p-2 rounded"
-                >
+                <button onClick={() => setShow(false)} className="text-xl text-red-600 hover:bg-gray-300 p-2 rounded">
                   X
                 </button>
               </div>
@@ -167,7 +153,7 @@ const Task = () => {
             </button>
           )}
         </div>
-        <div className="border border-blue-500 p-2 rounded">In-Progress</div>
+        <div className="border border-blue-500 p-2 rounded ">In-Progress</div>
         <div className="border border-green-500 p-2 rounded">Done</div>
       </div>
     </div>
@@ -175,3 +161,6 @@ const Task = () => {
 };
 
 export default Task;
+
+
+
