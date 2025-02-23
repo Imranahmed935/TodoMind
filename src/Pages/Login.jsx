@@ -23,11 +23,11 @@ const Login = () => {
       };
   
       // Check if user already exists
-      const existingUser = await axios.get(`http://localhost:5000/users/${data.email}`);
+      const existingUser = await axios.get(`https://task-server-mocha-nine.vercel.app/users/${data.email}`);
   
       if (!existingUser.data) { 
         // Add new user if email does not exist
-        const res = await axios.post('http://localhost:5000/users', data);
+        const res = await axios.post('https://task-server-mocha-nine.vercel.app/users', data);
   
         if (res.data.insertedId) {
           toast.success('User added');
