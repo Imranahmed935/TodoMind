@@ -18,10 +18,10 @@ const TaskCard = ({ task, refetch, isLoading }) => {
     // delete
     const handleDeleteOrder = async (id) => {
         try {
-            const { data } = await axios.delete(`http://localhost:5000/tasks/${id}`)
+            const { data } = await axios.delete(`https://task-server-mocha-nine.vercel.app/tasks/${id}`)
             console.log(data)
             refetch()
-            toast.success('Task deleted successfully')
+            toast.success('Task deleted ')
         } catch (err) {
             // console.log(err)
             toast.error(err.message)
@@ -53,7 +53,7 @@ const TaskCard = ({ task, refetch, isLoading }) => {
     // modal function
     const handleModal = async (id) => {
         try {
-            const { data } = await axios.get(`http://localhost:5000/singleTasks/${id}`)
+            const { data } = await axios.get(`https://task-server-mocha-nine.vercel.app/singleTasks/${id}`)
             setSingleTask(data)
             setIsModalOpen(true);
         } catch (err) {
@@ -63,7 +63,7 @@ const TaskCard = ({ task, refetch, isLoading }) => {
     }
 
 
-    // update task
+   
     const handleUpdateTask = (e) => {
         e.preventDefault()
 
@@ -75,18 +75,18 @@ const TaskCard = ({ task, refetch, isLoading }) => {
             description: e.target.description.value,
             category: e.target.category.value
         }
-        // console.log(food)
+       
 
-        axios.put(`http://localhost:5000/tasks/${singleTask._id}`, updatedTask)
+        axios.put(`https://task-server-mocha-nine.vercel.app/tasks/${singleTask._id}`, updatedTask)
             .then(res => {
                 if (res.data.modifiedCount) {
                     refetch()
                     setIsModalOpen(false);
-                    toast.success('Task Updated successfully')
+                    toast.success('Task Updated ')
                 }
             })
     }
-    // drag
+    
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "task",
         item: { id: task._id },
@@ -107,15 +107,15 @@ const TaskCard = ({ task, refetch, isLoading }) => {
                 <p className='mt-3'>{moment(task.createdAt).format('L') }</p>
             </div>
             <div className='flex gap-3'>
-                <button onClick={() => handleModal(task._id)} className='text-pink-500 font-semibold text-xl'><FaRegEdit /></button>
+                <button onClick={() => handleModal(task._id)} className='text-green-500 font-semibold text-xl'><FaRegEdit /></button>
                 <button onClick={() => deleteConfirmation(task._id)} className='text-red-500 font-semibold text-xl'><RiDeleteBin6Fill /></button>
             </div>
 
             {/* modal */}
             {/* Open the modal using document.getElementById('ID').showModal() method */}
             {isModalOpen && singleTask && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-md shadow-md w-96">
+                <div className="fixed inset-0 flex items-center justify-center   bg-opacity-50">
+                    <div className=" bg-slate-300  p-6 rounded-md shadow-md w-96">
                         <div className="flex justify-between">
                             <h2 className="text-lg font-bold text-gray-900">Edit Task</h2>
                             <button onClick={() => setIsModalOpen(false)} className="text-red-500 text-2xl">
@@ -131,7 +131,7 @@ const TaskCard = ({ task, refetch, isLoading }) => {
                                     required
                                     name="title"
                                     placeholder="Write task title"
-                                    className="input rounded-md input-bordered w-full"
+                                    className="input rounded-md input-bordered w-full p-2"
                                 />
                             </label>
 
@@ -142,7 +142,7 @@ const TaskCard = ({ task, refetch, isLoading }) => {
                                     defaultValue={singleTask?.description}
                                     name="description"
                                     placeholder="Write a short description"
-                                    className="textarea rounded-md textarea-bordered w-full"
+                                    className="textarea rounded-md textarea-bordered w-full p-2"
                                 ></textarea>
                             </label>
 
@@ -153,7 +153,7 @@ const TaskCard = ({ task, refetch, isLoading }) => {
                                 required
                                 defaultValue={singleTask.category}
                                 name="category"
-                                className="select rounded-md select-bordered w-full"
+                                className="select rounded-md select-bordered w-full p-2"
                             >
                                 <option disabled>Pick a task category</option>
                                 <option>To-Do</option>
@@ -161,7 +161,7 @@ const TaskCard = ({ task, refetch, isLoading }) => {
                                 <option>Done</option>
                             </select>
 
-                            <button className="btn border-none bg-pink-400 text-white font-semibold w-full mt-4">
+                            <button className="btn border-none bg-blue-400 text-white font-semibold w-full p-2 mt-4">
                                 Update Task
                             </button>
                         </form>

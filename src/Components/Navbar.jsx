@@ -17,7 +17,7 @@ const Navbar = () => {
   };
   return (
     <div>
-      <nav className="lg:w-10/12 mx-auto flex justify-between items-center lg:py-4 px-4 rounded mt-4 bg-teal-400">
+      <nav className="lg:w-8/12 mx-auto flex justify-between items-center lg:py-4 px-4 rounded mt-4 bg-sky-300">
         <h1 className="text-2xl font-bold">TodoMind</h1>
         <div className="flex items-center gap-4 ">
           <img className="w-12 h-12 rounded-full" src={user?.photoURL} alt="" />

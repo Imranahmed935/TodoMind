@@ -18,7 +18,7 @@ const Column = ({category, tasks, refetch, isLoading}) => {
           }))
         
           const addItemToSection = async (id) => {
-              const {data} = await axios.put(`http://localhost:5000/dragTask/${id}`, {
+              const {data} = await axios.put(`https://task-server-mocha-nine.vercel.app/dragTask/${id}`, {
                 category
               })
               console.log(data)
@@ -28,7 +28,10 @@ const Column = ({category, tasks, refetch, isLoading}) => {
           }
     return (
         <div ref={drop} className={`border rounded-md shadow-md ${isOver ? 'bg-slate-100 dark:bg-slate-500' : ''}`}>
-            <h2 className='p-3 bg-slate-200 dark:bg-neutral text-xl font-bold'>{category}</h2>
+            <h2 className={`p-3 font-semibold ${
+                category === 'To-Do' ? 'bg-pink-300': category === 'In-Progress'?'bg-blue-400':'bg-purple-400'
+               
+            }`}>{category}</h2>
             <div className='space-y-2 mt-2 p-2 min-h-20'>
                 {
                     tasks.length ? (

@@ -2,20 +2,45 @@ import { useContext } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { AuthContext } from "../Components/AuthProvider/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
-  const { handleLogin } = useContext(AuthContext);
+  const { handleLogin} = useContext(AuthContext);
   const navigate = useNavigate();
-  const handleLoginButton = () => {
-    handleLogin()
-      .then((result) => {
-        console.log(result.user);
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.log(error.massage);
-      });
+  const handleLoginButton = async () => {
+    try {
+      const result = await handleLogin(); // Ensure handleLogin is properly defined
+      
+      if (!result?.user) {
+        toast.error("Login failed");
+        return;
+      }
+  
+      const data = {
+        name: result.user.displayName,
+        email: result.user.email
+      };
+  
+      // Check if user already exists
+      const existingUser = await axios.get(`http://localhost:5000/users/${data.email}`);
+  
+      if (!existingUser.data) { 
+        // Add new user if email does not exist
+        const res = await axios.post('http://localhost:5000/users', data);
+  
+        if (res.data.insertedId) {
+          toast.success('User added');
+        }
+      }
+  
+      navigate("/home");
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error("Something went wrong");
+    }
   };
+  
   return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-lg">

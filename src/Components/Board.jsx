@@ -15,7 +15,7 @@ const Board = () => {
   const { data: tasks = [], refetch, isLoading } = useQuery({
     queryKey: ['tasks', user],
     queryFn: async () => {
-      const { data } = await axios.get(`http://localhost:5000/tasks/${user?.email}`)
+      const { data } = await axios.get(`https://task-server-mocha-nine.vercel.app/tasks/${user?.email}`)
       return data
     },
     enabled: true
@@ -37,11 +37,11 @@ const Board = () => {
       createdAt: new Date(),
       category: 'To-Do'
     }
-    // console.log(newTask)
+   
 
-    await axios.post('http://localhost:5000/tasks', newTask)
+    await axios.post('https://task-server-mocha-nine.vercel.app/tasks', newTask)
       .then(() => {
-        // console.log(res.data)
+       
         refetch()
         toast.success('Task Created')
         e.target.reset()
@@ -49,17 +49,20 @@ const Board = () => {
 
   }
   return (
-    
-      <div className='px-10'>
-          <CreateTask addTask={addTask}></CreateTask>
+    <>
+    <div className='lg:w-8/12 mx-auto mt-4 lg:ml-80'><CreateTask addTask={addTask}></CreateTask></div>
+      <div className='px-10 lg:w-8/12 mx-auto'>  
           <DndProvider backend={HTML5Backend}>
-          <div className='grid grid-cols-1 md:grid-cols-3 gap-8 mt-10'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mt-4'>
             {
               categories.map((category, index) => <Column isLoading={isLoading} refetch={refetch} key={index} category={category} tasks={tasks}></Column>)
             }
+           
           </div>
           </DndProvider>
+          
       </div>
+      </>
   );
 };
 
